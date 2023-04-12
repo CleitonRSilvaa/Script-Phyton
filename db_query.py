@@ -4,8 +4,8 @@ import re
 import os
 from dotenv import load_dotenv
 load_dotenv()
-# Função de retornar a conexão
 
+# Função de retornar a conexão
 def conexao():
     HOST = os.getenv('HOST') # or "domain.com"
     # database name, if you want just to connect to MySQL server, leave it empty
@@ -14,12 +14,14 @@ def conexao():
     USER = os.getenv('USER')
     # user password
     PASSWORD = os.getenv('PASSWORD')
+    PORT = '1433'
     try:
-        string_conexao = 'Driver={SQL Server Native Client 11.0};Server=' + HOST + ';Database=' + DATABASE + ';UID=' + USER + ';PWD=' + PASSWORD
+        string_conexao = 'Driver={SQL Server};Server=' + HOST + ',' + PORT + ';Database=' + DATABASE + ';UID=' + USER + ';PWD=' + PASSWORD
         # string_conexao = 'Driver={SQL Server Native Client 11.0};Server='+HOST+';Database='+DATABASE+';Trusted_Connection=yes;'
         conection = pyodbc.connect(string_conexao)
         return conection.cursor()
-    except:
+    except Exception as e:
+        print(e)
         return False
 
 
@@ -40,3 +42,7 @@ def consulta_card(p_matri, p_data_inicio):
     row = cursor.fetchone()
     if row:
         return str(row)
+
+
+if __name__ == '__main__':
+    ...
